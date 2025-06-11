@@ -321,9 +321,9 @@ def main():
     # Device connection details
     device = {
         'device_type': 'sophos_sfos',
-        'host': '172.16.44.33',
+        'host': '*',
         'username': 'admin',
-        'password': 'klobdam-ElCap07',
+        'password': '*',
         'fast_cli': False,  # Important for menu-driven interfaces
     }
 
