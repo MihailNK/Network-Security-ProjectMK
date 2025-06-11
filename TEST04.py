@@ -22,10 +22,10 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 
 # === API Connection Credentials ===
-API_HOST = "172.16.44.54"  # Firewall IP address
-API_PORT = "4444"  # Admin Console HTTPS Port (must match the firewall configuration)
+API_HOST = "*"  # Firewall IP address
+API_PORT = "*"  # Admin Console HTTPS Port (must match the firewall configuration)
 API_USERNAME = "admin"  # Your API username
-API_PASSWORD = "23belfat-Zfs"  # Insert your API password here
+API_PASSWORD = "*"  # Insert your API password here
 API_VERSION = "4444"  # Normally used by the SDK; we override the endpoint URL below
 
 LOG_FILE = "sophos_firewall_audit_sdk.log"
