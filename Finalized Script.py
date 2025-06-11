@@ -2,12 +2,13 @@ import requests
 import urllib3
 import json
 import datetime
+import re
+import sys
 
 # Disable SSL warnings for self-signed certificates.
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 LOG_FILE = "sophos_firewall_audit.log"
-
 
 def log_output(title, output):
     """Log output to console and file with headers."""
@@ -16,6 +17,24 @@ def log_output(title, output):
     with open(LOG_FILE, "a") as f:
         f.write(log_entry)
 
+def check_password_requirements(password):
+    """Check that password meets the basic requirements."""
+    # At least 12 characters long
+    if len(password) < 12:
+        return False, "Password must be at least 12 characters long."
+    # At least one uppercase letter
+    if not re.search(r"[A-Z]", password):
+        return False, "Password must contain at least one uppercase letter."
+    # At least one lowercase letter
+    if not re.search(r"[a-z]", password):
+        return False, "Password must contain at least one lowercase letter."
+    # At least one digit
+    if not re.search(r"\d", password):
+        return False, "Password must contain at least one digit."
+    # Any non-alphanumeric character qualifies as special
+    if not re.search(r"[^A-Za-z0-9]", password):
+        return False, "Password must contain at least one special character."
+    return True, ""
 
 class SophosXGAPI:
     def __init__(self, host, username, password):
@@ -39,10 +58,10 @@ class SophosXGAPI:
             response.raise_for_status()
             # Check if the response indicates an access restriction (status code 534).
             if "Status code=\"534\"" in response.text:
-                error_message = "API operations are not allowed from the requester IP address. Please check the firewall's API whitelist configuration."
+                error_message = ("API operations are not allowed from the requester IP address. "
+                                 "Please check the firewall's API whitelist configuration.")
                 log_output("API Error", f"Params: {params}\nError: {error_message}")
                 return {"error": error_message}
-
             try:
                 return response.json()
             except Exception:
@@ -87,11 +106,17 @@ class SophosXGAPI:
         params = {"req": "GetDoSProtectionStatus"}
         return self.call_api(params)
 
-
 def main():
     host = "*"  # Change to your firewall's IP address
-    username = "admin"  # Your username
-    password = "*"  # Your password
+    username = "*"     # Your username
+    password = "*"  # Your current admin password
+
+    valid, message = check_password_requirements(password)
+    if not valid:
+        log_output("Password Requirement Error", message)
+        sys.exit(1)
+    else:
+        log_output("Password Check", "Password meets the required criteria.")
 
     fw = SophosXGAPI(host, username, password)
 
@@ -144,7 +169,6 @@ def main():
         "dos_protection_status": current_dos_status,
     }
     log_output("Validation (API)", json.dumps(validation, indent=2))
-
 
 if __name__ == "__main__":
     start_time = datetime.datetime.now()
