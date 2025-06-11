@@ -1,4 +1,4 @@
-# Network-Security-ProjectMK
+# Network-Security-ProjectMihailNikolov
 
 This project is a course assignment designed to automate the remote configuration of network devices/hosts. The objective is to secure network devices by automatically executing a series of configuration steps that disable unused services, enable security-enhancing features, and validate the applied changes.
 
