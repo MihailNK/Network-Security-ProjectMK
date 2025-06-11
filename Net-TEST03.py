@@ -338,9 +338,9 @@ def validate_security_settings(net_connect):
 def main():
     device = {
         'device_type': 'sophos_sfos',
-        'host': '172.16.44.33',
+        'host': '*',
         'username': 'admin',
-        'password': 'klobdam-ElCap07',
+        'password': '*',
         'fast_cli': False,  # Critical for menu-driven CLIs
         'global_delay_factor': 3,  # Increased delay to give device more time to respond
     }
