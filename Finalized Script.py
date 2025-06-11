@@ -89,9 +89,9 @@ class SophosXGAPI:
 
 
 def main():
-    host = "172.16.44.54"  # Change to your firewall's IP address
+    host = "*"  # Change to your firewall's IP address
     username = "admin"  # Your username
-    password = "23belfat-Zfs"  # Your password
+    password = "*"  # Your password
 
     fw = SophosXGAPI(host, username, password)
 
